@@ -28,7 +28,7 @@ const initialState: State = {
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case ActionType.LOADING:
-      return { ...state, loading: true, error: null, data: null };
+      return { ...state, loading: true, error: null };
 
     case ActionType.SUCCESS:
       return { ...state, loading: false, error: null, data: action.payload };
@@ -41,32 +41,40 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-const useMoviesList = () => {
+const useMoviesList = (offset: number) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { data } = state;
 
   useEffect(() => {
-    fetchMoviesList();
-  }, []);
+    const fetchMoviesList = async () => {
+      dispatch({ type: ActionType.LOADING });
+      try {
+        const response = await axios.get<Movie[]>(
+          `http://localhost:8080/movies/list?offset=${offset}`
+        );
 
-  const fetchMoviesList = async () => {
-    dispatch({ type: ActionType.LOADING });
-    try {
-      const response = await axios.get<Movie[]>(
-        "http://localhost:8080/movies/list"
-      );
+        const moviesData = data ? [...data, ...response.data] : response.data;
 
-      dispatch({ type: ActionType.SUCCESS, payload: response.data });
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
         dispatch({
-          type: ActionType.FAILED,
-          payload: "Network error occurred",
+          type: ActionType.SUCCESS,
+          payload: moviesData,
         });
-      } else {
-        dispatch({ type: ActionType.FAILED, payload: "Something went wrong" });
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          dispatch({
+            type: ActionType.FAILED,
+            payload: "Network error occurred",
+          });
+        } else {
+          dispatch({
+            type: ActionType.FAILED,
+            payload: "Something went wrong",
+          });
+        }
       }
-    }
-  };
+    };
+    fetchMoviesList();
+  }, [offset]);
 
   return state;
 };
