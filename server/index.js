@@ -12,7 +12,9 @@ app.get("/", (req, res) => {
 });
 
 app.get("/movies/list", (req, res) => {
-  return res.json(movies);
+  const offset = req.query?.offset;
+  const slicedMovies = movies.slice(Number(offset) - 12, Number(offset));
+  return res.json(slicedMovies);
 });
 
 app.get("/movies/:id", (req, res) => {
