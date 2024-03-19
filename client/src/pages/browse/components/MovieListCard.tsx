@@ -3,11 +3,17 @@ import { SlArrowDown } from "react-icons/sl";
 import { Movie } from "../../../types";
 import { Link } from "react-router-dom";
 
-function MovieListCard({ movie }: { movie: Movie }) {
+function MovieListCard({
+  movie,
+  lastElementRef,
+}: {
+  movie: Movie;
+  lastElementRef: ((node: HTMLDivElement) => void) | null;
+}) {
   const { id, title, description, duration, genre, thumbnailUrl } = movie;
 
   return (
-    <div className=" h-52 group">
+    <div className=" h-52 group" ref={lastElementRef}>
       <img
         className="object-cover object-top h-full w-full"
         src={thumbnailUrl}
