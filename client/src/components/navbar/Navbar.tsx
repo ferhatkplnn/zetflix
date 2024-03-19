@@ -15,17 +15,19 @@ function NavBar() {
   const [showBackground, setShowBackground] = useState<boolean>(false);
 
   useEffect(() => {
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 900) {
+    const updateShowBackground = () => {
+      if (window.scrollY > 700) {
         setShowBackground(true);
       } else {
         setShowBackground(false);
       }
-    });
+    };
+    window.addEventListener("scroll", updateShowBackground);
+    return () => window.removeEventListener("scroll", updateShowBackground);
   }, []);
 
   return (
-    <nav className="w-full fixed z-40">
+    <nav id="navbar" className="w-full fixed z-40">
       <div
         className={`px-16 py-6 flex items-center ${
           showBackground ? "bg-black/80" : ""
