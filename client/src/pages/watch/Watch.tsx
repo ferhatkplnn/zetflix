@@ -1,6 +1,7 @@
 import { FaArrowLeft } from "react-icons/fa";
 import useMovie from "../../hooks/useMovie";
 import { useNavigate, useParams } from "react-router-dom";
+import NotFound404 from "../404/NotFound404";
 
 function Watch() {
   const { id } = useParams() as { id: string };
@@ -10,7 +11,7 @@ function Watch() {
 
   if (loading) return <p>Loading...</p>;
 
-  if (error || !data) return <p>{error}</p>;
+  if (error || !data) return <NotFound404 />;
 
   const { title, videoUrl } = data;
 
