@@ -1,15 +1,6 @@
 import axios from "axios";
 import { useEffect, useReducer } from "react";
-
-interface Movie {
-  id: string;
-  title: string;
-  description: string;
-  thumbnailUrl: string;
-  videoUrl: string;
-  duration: string;
-  genre: string;
-}
+import { Movie } from "../types";
 
 interface State {
   data: Movie[] | null;
