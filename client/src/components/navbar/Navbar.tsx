@@ -13,7 +13,7 @@ const TABS = [
 function NavBar() {
   return (
     <nav className="w-full fixed z-40">
-      <div className="px-16 py-6 flex items-center">
+      <div className="px-16 py-6 flex items-center bg-black/80">
         <Logo />
         <div className="flex gap-7 ml-8">
           {TABS.map((tab, index) => (
