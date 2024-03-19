@@ -1,10 +1,10 @@
 import { FaPlay } from "react-icons/fa";
 import { SlArrowDown } from "react-icons/sl";
 import { Movie } from "../../../types";
+import { Link } from "react-router-dom";
 
 function MovieListCard({ movie }: { movie: Movie }) {
-  const { id, title, description, duration, genre, thumbnailUrl, videoUrl } =
-    movie;
+  const { id, title, description, duration, genre, thumbnailUrl } = movie;
 
   return (
     <div className=" h-52 group">
@@ -22,9 +22,12 @@ function MovieListCard({ movie }: { movie: Movie }) {
           />
           <div className="p-4">
             <div className="flex justify-between py-4">
-              <button className="rounded-full h-12 w-12 bg-white flex justify-center items-center text-black">
+              <Link
+                to={`./watch/${id}`}
+                className="rounded-full h-12 w-12 bg-white flex justify-center items-center text-black"
+              >
                 <FaPlay size={25} />
-              </button>
+              </Link>
               <button className="rounded-full border-2 border-white h-12 w-12 flex justify-center items-center text-white">
                 <SlArrowDown />
               </button>
