@@ -4,7 +4,7 @@
     "title": "Breaking Bad",
     "description": "A high school teacher decides to cook meth to provide for his family before he dies of cancer",
     "thumbnailUrl": "https://m.media-amazon.com/images/S/pv-target-images/e92567e969684a67d6f01f696085d076f1ba8f7748bf1e3691e5e7faa84b4a39._AC_SX720_FMjpg_.jpg",
-    "videoUrl": "https://www.youtube.com/watch?v=HhesaQXLuRY",
+    "videoUrl": "HhesaQXLuRY",
     "duration": "2 hours",
     "genre": "Drama"
   },
@@ -15,7 +15,7 @@
     "duration": "1 hour 50 minutes",
     "genre": "Drama, Mystery",
     "thumbnailUrl": "https://m.media-amazon.com/images/S/pv-target-images/8650464e0012992e8f41b175f069da57f3fb65c484f9ba419d05cac17b15eba9._UR1920,1080_SX720_FMwebp_.jpg",
-    "videoUrl": "https://www.youtube.com/watch?v=i0xO64icGSY"
+    "videoUrl": "i0xO64icGSY"
   },
   {
     "id": 3,
@@ -24,7 +24,7 @@
     "duration": "2 hours 28 minutes",
     "genre": "Action, Sci-Fi",
     "thumbnailUrl": "https://m.media-amazon.com/images/S/pv-target-images/26677df38123a3a1553d704477c100af81b641e1d539bc1991f99f89935f18b0._UR1920,1080_SX720_FMwebp_.jpg",
-    "videoUrl": "https://www.youtube.com/watch?v=YoHD9XEInc0"
+    "videoUrl": "YoHD9XEInc0"
   },
   {
     "id": 4,
@@ -33,7 +33,7 @@
     "duration": "2 hours 30 minutes",
     "genre": "Biography, Drama",
     "thumbnailUrl": "https://m.media-amazon.com/images/S/pv-target-images/88c9320b566071dd7872edc8acee3779497415a1b31f9336213a4ca30198b5f8._UR1920,1080_SX720_FMwebp_.jpg",
-    "videoUrl": "https://www.youtube.com/watch?v=BFwGqLa_oAo"
+    "videoUrl": "BFwGqLa_oAo"
   },
   {
     "id": 5,
@@ -42,7 +42,7 @@
     "duration": "2 hours 49 minutes",
     "genre": "Adventure, Drama, Sci-Fi",
     "thumbnailUrl": "https://m.media-amazon.com/images/S/pv-target-images/1e5bb226ec130ddddc132192ac6d57e6f11f1a14657a64bf9f08cd5a2c5ee775._UR1920,1080_SX720_FMwebp_.jpg",
-    "videoUrl": "https://www.youtube.com/watch?v=zSWdZVtXT7E"
+    "videoUrl": "zSWdZVtXT7E"
   },
   {
     "id": 6,
@@ -51,7 +51,7 @@
     "duration": "1 hour 39 minutes",
     "genre": "Comedy, Drama",
     "thumbnailUrl": "https://m.media-amazon.com/images/S/pv-target-images/9da1d89f1cbdde85baa0012711230c2f2170cebd0cec6a4de90f415332918176._UR1920,1080_SX720_FMwebp_.jpg",
-    "videoUrl": "https://www.youtube.com/watch?v=1Fg5iWmQjwk"
+    "videoUrl": "1Fg5iWmQjwk"
   },
   {
     "id": 7,
@@ -60,7 +60,7 @@
     "duration": "1 hour 47 minutes",
     "genre": "Drama, Music",
     "thumbnailUrl": "https://m.media-amazon.com/images/S/pv-target-images/9e98b1416e73aa393325926716861fe7aafcad04bf83c2bd9ecb9c71b16e1818._UR1920,1080_SX720_FMwebp_.jpg",
-    "videoUrl": "https://www.youtube.com/watch?v=7d_jQycdQGo"
+    "videoUrl": "7d_jQycdQGo"
   },
   {
     "id": 8,
@@ -69,7 +69,7 @@
     "duration": "2 hours 3 minutes",
     "genre": "Adventure, Drama, Fantasy",
     "thumbnailUrl": "https://m.media-amazon.com/images/S/pv-target-images/e9b4a5eda5b9835037bc93b9129167332d39f664146289528feb31b7d163df35._UR1920,1080_SX720_FMwebp_.jpg",
-    "videoUrl": "https://www.youtube.com/watch?v=XFYWazblaUA"
+    "videoUrl": "XFYWazblaUA"
   },
   {
     "id": 9,
@@ -78,7 +78,7 @@
     "duration": "2 hours 29 minutes",
     "genre": "Drama, Mystery, Thriller",
     "thumbnailUrl": "https://m.media-amazon.com/images/S/pv-target-images/dd765b8c4514277ca971676aeb8c2cc9a84794b69aac7747ba3d28f21f5fa43a._UR1920,1080_SX720_FMwebp_.jpg",
-    "videoUrl": "https://www.youtube.com/watch?v=2-_-1nJf8Vg"
+    "videoUrl": "2-_-1nJf8Vg"
   },
   {
     "id": 10,
@@ -87,6 +87,6 @@
     "duration": "2 hours",
     "genre": "Action, Adventure, Sci-Fi",
     "thumbnailUrl": "https://m.media-amazon.com/images/S/pv-target-images/6ae7e7869b981eb8ea36f8d2f1d7d27c0284b2e86db15d998ea844a8f332e436._UR1920,1080_SX720_FMwebp_.jpg",
-    "videoUrl": "https://www.youtube.com/watch?v=hEJnMQG9ev8"
+    "videoUrl": "hEJnMQG9ev8"
   }
 ]
