@@ -14,7 +14,9 @@ app.get("/", (req, res) => {
 app.get("/movies/list", (req, res) => {
   const offset = req.query?.offset;
   const slicedMovies = movies.slice(Number(offset) - 12, Number(offset));
-  return res.json(slicedMovies);
+  setTimeout(() => {
+    return res.json({ movies: slicedMovies, limit: movies.length });
+  }, 800);
 });
 
 app.get("/movies/:id", (req, res) => {
