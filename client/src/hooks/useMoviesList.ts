@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { Movie } from "../types";
 
 interface State {
@@ -45,15 +45,23 @@ const useMoviesList = (offset: number) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { data } = state;
 
+  const [limit, setLimit] = useState<number | null>(null);
+
   useEffect(() => {
     const fetchMoviesList = async () => {
+      if (data && limit && data.length >= limit) return;
+
       dispatch({ type: ActionType.LOADING });
       try {
-        const response = await axios.get<Movie[]>(
+        const response = await axios.get(
           `http://localhost:8080/movies/list?offset=${offset}`
         );
 
-        const moviesData = data ? [...data, ...response.data] : response.data;
+        const moviesData = data
+          ? [...data, ...response.data.movies]
+          : response.data.movies;
+
+        setLimit(response.data.limit);
 
         dispatch({
           type: ActionType.SUCCESS,
