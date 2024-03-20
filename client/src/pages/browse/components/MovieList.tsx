@@ -1,15 +1,18 @@
 import { Movie } from "../../../types";
 import MovieListCard from "./MovieListCard";
+import PlaceholderListCard from "./PlaceholderListCard";
 
 function MovieList({
   movies,
   lastElementRef,
+  loading,
 }: {
   movies: Movie[];
   lastElementRef: (node: HTMLDivElement) => void;
+  loading: boolean;
 }) {
   return (
-    <div className="px-12 mt-4 space-y-8">
+    <div className="px-12 mt-4 space-y-8 mb-96">
       <div>
         <p className="text-black text-2xl font-semibold mb-4">Popular Shows</p>
         <div className="grid sm:grid-cols-2 xl:grid-cols-4 md:grid-cols-3  gap-2">
@@ -23,6 +26,10 @@ function MovieList({
                 }
               />
             ))}
+          {loading &&
+            Array(12)
+              .fill(0)
+              .map(() => <PlaceholderListCard />)}
         </div>
       </div>
     </div>
