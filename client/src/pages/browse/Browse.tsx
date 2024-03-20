@@ -5,7 +5,7 @@ import BillBoard from "./components/BillBoard";
 import MovieList from "./components/MovieList";
 
 function Browse() {
-  const [offset, setOffset] = useState<number>(12);
+  const [offset, setOffset] = useState<number>(0);
   const { data, loading, error } = useMoviesList(offset);
 
   const observer = useRef<null | IntersectionObserver>(null);
