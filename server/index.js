@@ -1,36 +1,17 @@
 const express = require("express");
 const cors = require("cors");
-const movies = require("./movies.json");
-const { prisma } = require("./db");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use("", require("./routes/movies"));
+app.use("/auth", require("./routes/auth"));
 
-app.get("/", (req, res) => {
-  res.json({ message: "Hello World!" });
-});
-
-app.get("/movies/list", async (req, res) => {
-  const offset = Number(req.query?.offset);
-  const count = await prisma.movie.count();
-  const movies = await prisma.movie.findMany({
-    take: 12,
-    skip: offset,
-  });
-  return res.json({ movies, limit: count });
-});
-
-app.get("/movies/:id", async (req, res) => {
-  const id = req.params?.id;
-
-  const movie = await prisma.movie.findUnique({ where: { id: Number(id) } });
-
-  if (!movie) {
-    return res.status(404).json({ error: "Movie not found" });
-  }
-  res.json(movie);
+app.use((err, req, res, next) => {
+  console.log("hello there this is a error");
+  console.error(err.stack);
+  res.status(500).send("Somthing broke!");
 });
 
 app.use((req, res, next) => {
