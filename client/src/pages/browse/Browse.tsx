@@ -28,8 +28,13 @@ function Browse() {
       <BillBoard />
       <div className="pb-5">
         {error && <p>{error}</p>}
-        {data && <MovieList movies={data} lastElementRef={lastElementRef} />}
-        {loading && <p>Loading...</p>}
+        {data && (
+          <MovieList
+            movies={data}
+            loading={loading}
+            lastElementRef={lastElementRef}
+          />
+        )}
       </div>
     </div>
   );
