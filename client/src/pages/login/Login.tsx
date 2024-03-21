@@ -1,7 +1,12 @@
 import { createContext, useState } from "react";
 import NavBar from "../../components/navbar/Navbar";
 import Input from "../../components/shared/Input";
-import { useForm, SubmitHandler, UseFormRegister } from "react-hook-form";
+import {
+  useForm,
+  SubmitHandler,
+  UseFormRegister,
+  FieldErrors,
+} from "react-hook-form";
 
 export type Inputs = {
   email: string;
@@ -16,10 +21,12 @@ enum Variant {
 
 interface AuthFormContextType {
   register: UseFormRegister<Inputs> | null;
+  errors: FieldErrors<Inputs>;
 }
 
 export const AuthFormContext = createContext<AuthFormContextType>({
   register: null,
+  errors: {},
 });
 
 function Login() {
@@ -27,13 +34,13 @@ function Login() {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
+    getValues,
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data);
-    console.log(watch(["email", "password"]));
   };
+  console.log(errors);
 
   const [variant, setVariant] = useState(Variant.LOGIN_IN);
 
@@ -45,7 +52,7 @@ function Login() {
           <h2 className="text-white text-4xl mb-8 font-semibold">
             {variant === Variant.LOGIN_IN ? "Sign in" : "Sign up"}
           </h2>
-          <AuthFormContext.Provider value={{ register }}>
+          <AuthFormContext.Provider value={{ register, errors }}>
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="flex flex-col gap-4"
@@ -54,7 +61,31 @@ function Login() {
               {variant === Variant.SIGN_UP && (
                 <Input label="Username" name="username" type="text" />
               )}
-              <Input label="Password" name="password" type="password" />
+              <Input
+                label="Password"
+                name="password"
+                type="password"
+                validate={
+                  variant === Variant.SIGN_UP
+                    ? () => {
+                        const password = getValues("password");
+                        if (password.length < 8) {
+                          return "Password must be greater than 8 characters";
+                        }
+                        if (!/[A-Z]/.test(password)) {
+                          return "Password must have at least one uppercase value";
+                        }
+                        if (!/[a-z]/.test(password)) {
+                          return "Password must have at least one lowercase value";
+                        }
+                        if (!/\d/.test(password)) {
+                          return "Password must have a number";
+                        }
+                        return true;
+                      }
+                    : undefined
+                }
+              />
               <input
                 type="submit"
                 value="Submit"
