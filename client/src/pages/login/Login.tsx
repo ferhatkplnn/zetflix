@@ -7,6 +7,7 @@ import {
   UseFormRegister,
   FieldErrors,
 } from "react-hook-form";
+import useAuth from "../../hooks/useAuth";
 
 export type Inputs = {
   email: string;
@@ -37,10 +38,21 @@ function Login() {
     getValues,
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+  const { signup, login } = useAuth();
+
+  const onSubmit: SubmitHandler<Inputs> = async ({
+    password,
+    email,
+    username,
+  }) => {
+    if (variant === Variant.SIGN_UP) {
+      const response = await signup({ email, username, password });
+      console.log(response);
+    } else {
+      const response = await login({ email, password });
+      console.log(response);
+    }
   };
-  console.log(errors);
 
   const [variant, setVariant] = useState(Variant.LOGIN_IN);
 
