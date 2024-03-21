@@ -25,16 +25,8 @@ const createUser = async (userData) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = await prisma.user.create({
-    data: {
-      email,
-      username,
-      password: hashedPassword,
-    },
-    select: {
-      id: true,
-      username: true,
-      email: true,
-    },
+    data: { email, username, password: hashedPassword },
+    select: { id: true, username: true, email: true },
   });
 
   return newUser;
@@ -42,11 +34,7 @@ const createUser = async (userData) => {
 
 const generateJWT = (user) => {
   const token = JWT.sign(
-    {
-      id: user.id,
-      email: user.email,
-      username: user.username,
-    },
+    { id: user.id, email: user.email, username: user.username },
     process.env.JWT_SECRET,
     { expiresIn: 3600000 }
   );
@@ -77,9 +65,7 @@ router.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
+    const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
       return res.status(400).json({ erros: [{ msg: "Invalid  credentials" }] });
@@ -91,15 +77,13 @@ router.post("/login", async (req, res, next) => {
       return res.status(400).json({ erros: [{ msg: "Invalid  credentials" }] });
     }
 
+    const token = generateJWT(user);
+
     const userPayload = {
       id: user.id,
       email: user.email,
       username: user.username,
     };
-
-    const token = JWT.sign(userPayload, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
 
     res.json({
       user: userPayload,
