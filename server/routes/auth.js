@@ -4,66 +4,74 @@ const { prisma } = require("../db");
 const bcrypt = require("bcrypt");
 const JWT = require("jsonwebtoken");
 
-router.post(
-  "/signup",
-  [
-    check("email", "Please input a valid email").isEmail(),
-    check(
-      "password",
-      "Please input a password with a min length of 6"
-    ).isLength({ min: 6 }),
-    check(
-      "username",
-      "Please input a username with a min lenght of 6"
-    ).isLength({ min: 6 }),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
+const validateUserData = [
+  check("email", "Please input a valid email").isEmail(),
+  check("password", "Please input a password with a min length of 6").isLength({
+    min: 6,
+  }),
+  check("username", "Please input a username with a min length of 6").isLength({
+    min: 6,
+  }),
+];
 
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array(),
-      });
-    }
-    const { email, password, username } = req.body;
+const createUser = async (userData) => {
+  const { email, password, username } = userData;
 
-    const user = await prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
+  const existingUser = await prisma.user.findUnique({ where: { email } });
 
-    if (user) {
-      return res
-        .status(400)
-        .json({ errors: [{ msg: "This user already exists." }] });
-    }
+  if (existingUser) {
+    throw new Error("This user already exists.");
+  }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const newUser = await prisma.user.create({
+    data: {
+      email,
+      username,
+      password: hashedPassword,
+    },
+    select: {
+      id: true,
+      username: true,
+      email: true,
+    },
+  });
 
-    const newUser = await prisma.user.create({
-      data: {
-        email,
-        username,
-        password: hashedPassword,
-      },
-      select: {
-        id: true,
-        username: true,
-        email: true,
-      },
-    });
+  return newUser;
+};
 
-    const token = JWT.sign(newUser, process.env.JWT_SECRET, {
-      expiresIn: 3600000,
-    });
+const generateJWT = (user) => {
+  const token = JWT.sign(
+    {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: 3600000 }
+  );
 
-    res.json({
-      user: newUser,
-      token,
+  return token;
+};
+
+router.post("/signup", validateUserData, async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      errors: errors.array(),
     });
   }
-);
+
+  try {
+    const newUser = await createUser(req.body);
+
+    const token = generateJWT(newUser);
+
+    res.json({ user: newUser, token });
+  } catch (error) {
+    res.status(400).json({ errors: [{ msg: error.message }] });
+  }
+});
 
 router.post("/login", async (req, res, next) => {
   try {
