@@ -94,4 +94,40 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+router.get("/me", async (req, res) => {
+  try {
+    const bearerToken = req.headers.authorization;
+
+    if (!bearerToken || !bearerToken.startsWith("Bearer ")) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const token = bearerToken.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const payload = JWT.verify(token, process.env.JWT_SECRET);
+
+    if (!payload || !payload.email) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: payload.email },
+      select: { id: true, email: true, username: true },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    return res.json(user);
+  } catch (error) {
+    console.error("Error in /me endpoint:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 module.exports = router;
