@@ -1,19 +1,24 @@
-import { ComponentPropsWithoutRef } from "react";
+import { ComponentPropsWithoutRef, useContext } from "react";
+import { AuthFormContext, Inputs } from "../../pages/login/Login";
 
 type InputProps = ComponentPropsWithoutRef<"input"> & {
   label: string;
-  name: string;
+  name: keyof Inputs;
 };
 
 function Input({ label, name, type }: InputProps) {
+  const { register } = useContext(AuthFormContext);
+
+  if (!register) return null;
+
   return (
     <div className="relative">
       <input
         id={name}
-        name={name}
         type={type}
         placeholder=""
         className="peer bg-black bg-opacity-50 px-4 pt-6 pb-2 w-full rounded border border-slate-600 text-white focus:ring-2 focus:ring-white outline-none invalid:border-red-500"
+        {...register(name)}
       />
       <label
         htmlFor={name}
