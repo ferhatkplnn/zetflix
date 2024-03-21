@@ -8,6 +8,8 @@ import {
   FieldErrors,
 } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
+import { isAxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
 
 export type Inputs = {
   email: string;
@@ -37,24 +39,37 @@ function Login() {
     formState: { errors },
     getValues,
   } = useForm<Inputs>();
-
+  const [variant, setVariant] = useState(Variant.LOGIN_IN);
+  const [authError, setAuthError] = useState<string>("");
   const { signup, login } = useAuth();
+  const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<Inputs> = async ({
     password,
     email,
     username,
   }) => {
-    if (variant === Variant.SIGN_UP) {
-      const response = await signup({ email, username, password });
-      console.log(response);
-    } else {
-      const response = await login({ email, password });
-      console.log(response);
+    try {
+      if (variant === Variant.SIGN_UP) {
+        const response = await signup({ email, username, password });
+      } else {
+        const response = await login({ email, password });
+      }
+      setAuthError("");
+      navigate("/browse");
+    } catch (error) {
+      if (isAxiosError(error) && error?.response?.data) {
+        setAuthError(error.response.data.errors[0].msg);
+      }
     }
   };
 
-  const [variant, setVariant] = useState(Variant.LOGIN_IN);
+  const handleChangeAuthVariant = () => {
+    if (variant === Variant.LOGIN_IN) setVariant(Variant.SIGN_UP);
+    else setVariant(Variant.LOGIN_IN);
+
+    setAuthError("");
+  };
 
   return (
     <div className="relative bg-black h-screen w-screen bg-opacity-50">
@@ -103,12 +118,13 @@ function Login() {
                 value="Submit"
                 className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 cursor-pointer duration-300"
               />
+              {authError && <p className="text-red-600">{authError}</p>}
             </form>
           </AuthFormContext.Provider>
           {variant === Variant.LOGIN_IN ? (
             <p
               className="text-neutral-500 mt-12"
-              onClick={() => setVariant(Variant.SIGN_UP)}
+              onClick={handleChangeAuthVariant}
             >
               <span className="text-white ml-1 hover:underline cursor-pointer">
                 First time using Zetflix?
@@ -117,7 +133,7 @@ function Login() {
           ) : (
             <p
               className="text-neutral-500 mt-12"
-              onClick={() => setVariant(Variant.LOGIN_IN)}
+              onClick={handleChangeAuthVariant}
             >
               <span className="text-white ml-1 hover:underline cursor-pointer">
                 Already have an account?
