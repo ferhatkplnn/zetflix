@@ -4,10 +4,11 @@ import { AuthFormContext, Inputs } from "../../pages/login/Login";
 type InputProps = ComponentPropsWithoutRef<"input"> & {
   label: string;
   name: keyof Inputs;
+  validate?: (text: string) => string | true;
 };
 
-function Input({ label, name, type }: InputProps) {
-  const { register } = useContext(AuthFormContext);
+function Input({ label, name, type, validate }: InputProps) {
+  const { register, errors } = useContext(AuthFormContext);
 
   if (!register) return null;
 
@@ -18,7 +19,10 @@ function Input({ label, name, type }: InputProps) {
         type={type}
         placeholder=""
         className="peer bg-black bg-opacity-50 px-4 pt-6 pb-2 w-full rounded border border-slate-600 text-white focus:ring-2 focus:ring-white outline-none invalid:border-red-500"
-        {...register(name)}
+        {...register(name, {
+          required: true,
+          validate,
+        })}
       />
       <label
         htmlFor={name}
@@ -26,6 +30,12 @@ function Input({ label, name, type }: InputProps) {
       >
         {label}
       </label>
+      {errors[name]?.type === "required" && (
+        <p className="text-red-600">This field is required.</p>
+      )}
+      {errors[name]?.type === "validate" && (
+        <p className="text-red-600">{errors[name]?.message}</p>
+      )}
     </div>
   );
 }
