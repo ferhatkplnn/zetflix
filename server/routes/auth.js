@@ -65,43 +65,41 @@ router.post(
   }
 );
 
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+router.post("/login", async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
-
-  if (!user) {
-    return res.status(400).json({
-      erros: [{ msg: "Invalid  credentials" }],
+    const user = await prisma.user.findUnique({
+      where: { email },
     });
-  }
 
-  const isMatch = await bcrypt.compare(password, user.password);
+    if (!user) {
+      return res.status(400).json({ erros: [{ msg: "Invalid  credentials" }] });
+    }
 
-  if (!isMatch) {
-    return res.status(400).json({
-      erros: [{ msg: "Invalid  credentials" }],
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(400).json({ erros: [{ msg: "Invalid  credentials" }] });
+    }
+
+    const userPayload = {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+    };
+
+    const token = JWT.sign(userPayload, process.env.JWT_SECRET, {
+      expiresIn: "1h",
     });
+
+    res.json({
+      user: userPayload,
+      token,
+    });
+  } catch (error) {
+    return next(error);
   }
-
-  const userPayload = {
-    id: user.id,
-    email: user.email,
-    username: user.username,
-  };
-
-  const token = JWT.sign(userPayload, process.env.JWT_SECRET, {
-    expiresIn: 3600000,
-  });
-
-  res.json({
-    user: userPayload,
-    token,
-  });
 });
 
 module.exports = router;
