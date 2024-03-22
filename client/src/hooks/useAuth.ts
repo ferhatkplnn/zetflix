@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookie from "universal-cookie";
 import { useDispatch } from "react-redux";
-import { setUser } from "../features/userSlice";
+import { setUser, clearUser } from "../features/userSlice";
 
 const cookie = new Cookie();
 
@@ -39,7 +39,25 @@ const useAuth = () => {
     return response.data;
   };
 
-  const fetchUser = () => {};
+  const fetchUser = async () => {
+    const sessionToken = cookie.get("session_token");
+    try {
+      const response = await axios.get("http://localhost:8080/auth/me", {
+        headers: {
+          ...(sessionToken
+            ? { Authorization: `Bearer ${sessionToken}` }
+            : null),
+        },
+      });
+      const user = response.data;
+      if (!user) return dispatch(clearUser());
+
+      dispatch(setUser({ email: user.email, userName: user.username }));
+    } catch (error) {
+      dispatch(clearUser());
+      console.error(error);
+    }
+  };
 
   return { login, signup, fetchUser };
 };
