@@ -12,14 +12,18 @@ router.get("/movies/list", async (req, res) => {
 });
 
 router.get("/movies/:id", async (req, res) => {
-  const id = req.params?.id;
+  try {
+    const id = req.params?.id;
 
-  const movie = await prisma.movie.findUnique({ where: { id: Number(id) } });
+    const movie = await prisma.movie.findUnique({ where: { id: Number(id) } });
 
-  if (!movie) {
-    return res.status(404).json({ error: "Movie not found" });
+    if (!movie) {
+      return res.status(404).json({ error: "Movie not found" });
+    }
+    res.json(movie);
+  } catch (error) {
+    next(error);
   }
-  res.json(movie);
 });
 
 module.exports = router;
