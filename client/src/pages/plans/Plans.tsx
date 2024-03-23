@@ -1,3 +1,4 @@
+import usePlans from "../../hooks/usePlans";
 import PlanCard from "./components/PlanCard";
 
 const PLANS = [
@@ -6,6 +7,10 @@ const PLANS = [
 ];
 
 function Plans() {
+  const { loading, data, error } = usePlans();
+
+  console.log({ loading, data, error });
+
   return (
     <div className="flex items-center h-screen justify-center">
       <div className="w-[600px]">
