@@ -29,7 +29,7 @@ function MovieList({
           {loading &&
             Array(12)
               .fill(0)
-              .map(() => <PlaceholderListCard />)}
+              .map((_, index) => <PlaceholderListCard key={index} />)}
         </div>
       </div>
     </div>
