@@ -1,15 +1,13 @@
 import usePlans from "../../hooks/usePlans";
 import PlanCard from "./components/PlanCard";
 
-const PLANS = [
-  { type: "Basic", price: "$5.99", downloads: true, southPark: false },
-  { type: "Premium", price: "$10.99", downloads: true, southPark: true },
-];
-
 function Plans() {
   const { loading, data, error } = usePlans();
 
-  console.log({ loading, data, error });
+  console.log("Plans is rendered");
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="flex items-center h-screen justify-center">
@@ -18,15 +16,16 @@ function Plans() {
           Choose a plan that works for you
         </h1>
         <div className="flex mt-4">
-          {PLANS.map((plan, index) => (
-            <PlanCard
-              key={index}
-              type={plan.type}
-              price={plan.price}
-              downloads={plan.downloads}
-              southPark={plan.southPark}
-            />
-          ))}
+          {data &&
+            data.map((plan, index) => (
+              <PlanCard
+                key={index}
+                type={plan.name}
+                price={plan.price.amount}
+                downloads={plan.canDownload}
+                southPark={plan.canWatchSouth}
+              />
+            ))}
         </div>
         <button className="bg-red-500 py-3 text-white rounded-md w-full mt-4 hover:bg-red-700 cursor-pointer duration-300">
           Purchase
