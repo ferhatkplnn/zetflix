@@ -4,6 +4,9 @@ import { useEffect, useReducer } from "react";
 interface Plan {
   id: string;
   name: string;
+  canDownload: boolean;
+  canWatchSouth: boolean;
+  can: boolean;
   price: {
     amount: number;
     id: string;
