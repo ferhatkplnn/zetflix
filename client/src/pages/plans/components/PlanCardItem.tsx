@@ -3,11 +3,17 @@ import { FaCheck } from "react-icons/fa";
 
 type PlanCardItemProps = {
   title: string;
-  description: string;
+  description: string | number;
   condition: boolean;
+  type: "price" | "feature";
 };
 
-const PlanCardItem = ({ title, description, condition }: PlanCardItemProps) => {
+const PlanCardItem = ({
+  title,
+  description,
+  condition,
+  type,
+}: PlanCardItemProps) => {
   return (
     <div className="border-b py-4 flex text-base items-center">
       <div
@@ -24,7 +30,10 @@ const PlanCardItem = ({ title, description, condition }: PlanCardItemProps) => {
 
       <div className="ml-3">
         <div className="text-gray-600">{title}</div>
-        <div className="font-semibold">{description}</div>
+        <div className="font-semibold">
+          {type === "price" ? "$" : ""}
+          {description}
+        </div>
       </div>
     </div>
   );
