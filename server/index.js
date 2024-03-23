@@ -9,7 +9,6 @@ app.use("", require("./routes/movies"));
 app.use("/auth", require("./routes/auth"));
 
 app.use((err, req, res, next) => {
-  console.log("hello there this is a error");
   console.error(err.stack);
   res.status(500).send("Somthing broke!");
 });

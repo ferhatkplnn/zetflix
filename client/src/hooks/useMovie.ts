@@ -43,7 +43,6 @@ const reducer = (state: State, action: Action): State => {
 
 const useMovie = (id: string) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  console.log(state);
 
   useEffect(() => {
     const fetchMovieDetail = async () => {
