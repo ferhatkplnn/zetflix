@@ -56,7 +56,7 @@ const usePlans = () => {
     const fetchPlansList = async () => {
       dispatch({ type: ActionType.LOADING });
       try {
-        const response = await axios.get(`http://localhost:8080/subs/products`);
+        const response = await axios.get(`http://localhost:8080/sub/products`);
 
         dispatch({
           type: ActionType.SUCCESS,
