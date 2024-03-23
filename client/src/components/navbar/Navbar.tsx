@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import Logo from "./Logo";
 import NavItem from "./NavItem";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
+import useAuth from "../../hooks/useAuth";
 
 const TABS = [
   "Home",
@@ -12,6 +15,12 @@ const TABS = [
 ];
 
 function NavBar() {
+  const { user, isLoading } = useSelector(
+    (state: RootState) => state.user.value
+  );
+
+  const { logout } = useAuth();
+
   const [showBackground, setShowBackground] = useState<boolean>(false);
 
   useEffect(() => {
@@ -34,10 +43,17 @@ function NavBar() {
         } duration-300`}
       >
         <Logo />
-        <div className="flex gap-7 ml-8">
+        <div className="flex gap-7 ml-8 mr-auto">
           {TABS.map((tab, index) => (
             <NavItem key={index} text={tab} />
           ))}
+        </div>
+        <div>
+          {user && isLoading && (
+            <div className="text-white hover:text-gray-300 cursor-pointer">
+              <p onClick={logout}>Logout</p>
+            </div>
+          )}
         </div>
       </div>
     </nav>
