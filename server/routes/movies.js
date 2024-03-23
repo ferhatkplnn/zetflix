@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { prisma } = require("../db");
 
-router.get("/movies/list", async (req, res) => {
+router.get("/movies/list", async (req, res, next) => {
   try {
     const offset = Number(req.query?.offset);
     const count = await prisma.movie.count();
