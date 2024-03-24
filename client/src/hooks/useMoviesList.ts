@@ -1,6 +1,9 @@
 import axios from "axios";
 import { useEffect, useReducer, useState } from "react";
 import { Movie } from "../types";
+import Cookie from "universal-cookie";
+
+const cookie = new Cookie();
 
 interface State {
   data: Movie[] | null;
@@ -53,8 +56,16 @@ const useMoviesList = (offset: number) => {
 
       dispatch({ type: ActionType.LOADING });
       try {
+        const sessionToken = cookie.get("session_token");
         const response = await axios.get(
-          `http://localhost:8080/movies/list?offset=${offset}`
+          `http://localhost:8080/movies/list?offset=${offset}`,
+          {
+            headers: {
+              ...(sessionToken
+                ? { Authorization: `Bearer ${sessionToken}` }
+                : null),
+            },
+          }
         );
 
         const moviesData = data
@@ -71,12 +82,12 @@ const useMoviesList = (offset: number) => {
         if (axios.isAxiosError(error)) {
           dispatch({
             type: ActionType.FAILED,
-            payload: "Network error occurred",
+            payload: error?.response?.data?.errors[0].msg,
           });
         } else {
           dispatch({
             type: ActionType.FAILED,
-            payload: "Something went wrong",
+            payload: "Network error occurred",
           });
         }
       }
