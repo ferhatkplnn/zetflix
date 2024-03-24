@@ -36,7 +36,7 @@ function Plans() {
 
   useEffect(() => {
     fetchSubscription();
-  }, [fetchSubscription]);
+  }, []);
 
   if (loading || subscriptionLoading) return <div>Loading...</div>;
 
