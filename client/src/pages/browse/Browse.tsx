@@ -3,6 +3,7 @@ import NavBar from "../../components/navbar/Navbar";
 import useMoviesList from "../../hooks/useMoviesList";
 import BillBoard from "./components/BillBoard";
 import MovieList from "./components/MovieList";
+import { Navigate } from "react-router-dom";
 
 function Browse() {
   const [offset, setOffset] = useState<number>(0);
@@ -21,6 +22,10 @@ function Browse() {
 
     if (node) observer.current.observe(node);
   }, []);
+
+  console.log(error);
+
+  if (error === "Unauthorized; no plan") return <Navigate to="/plans" />;
 
   return (
     <div>
