@@ -1,8 +1,22 @@
 const router = require("express").Router();
 const { prisma } = require("../db");
+const checkAuth = require("../middleware");
+const fetchSubscription = require("../utils/stripe");
 
-router.get("/movies/list", async (req, res, next) => {
+router.get("/movies/list", checkAuth, async (req, res, next) => {
   try {
+    const subscription = await fetchSubscription(req.user.email);
+
+    if (!subscription) {
+      return res.status(403).json({
+        errors: [
+          {
+            msg: "Unauthorized; no plan",
+          },
+        ],
+      });
+    }
+
     const offset = Number(req.query?.offset);
     const count = await prisma.movie.count();
     const movies = await prisma.movie.findMany({
@@ -15,7 +29,7 @@ router.get("/movies/list", async (req, res, next) => {
   }
 });
 
-router.get("/movies/:id", async (req, res) => {
+router.get("/movies/:id", checkAuth, async (req, res) => {
   try {
     const id = req.params?.id;
 
