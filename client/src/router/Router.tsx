@@ -7,6 +7,7 @@ import Watch from "../pages/watch/Watch";
 import Browse from "../pages/browse/Browse";
 import NotFound404 from "../pages/404/NotFound404";
 import PrivateRoutes from "./PrivateRoutes";
+import PlansManage from "../pages/plansManage/PlansManage";
 
 export const router = createBrowserRouter([
   {
@@ -18,7 +19,10 @@ export const router = createBrowserRouter([
       {
         path: "/plans",
         element: <PrivateRoutes />,
-        children: [{ path: "/plans", element: <Plans /> }],
+        children: [
+          { path: "/plans", element: <Plans /> },
+          { path: "/plans/manage", element: <PlansManage /> },
+        ],
       },
       {
         path: "/browse",
