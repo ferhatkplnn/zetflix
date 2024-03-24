@@ -49,7 +49,7 @@ function NavBar() {
           ))}
         </div>
         <div>
-          {user && isLoading && (
+          {user && !isLoading && (
             <div className="text-white hover:text-gray-300 cursor-pointer">
               <p onClick={logout}>Logout</p>
             </div>
