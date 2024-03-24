@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { check, validationResult } = require("express-validator");
+const checkAuth = require("../middleware");
 const { prisma } = require("../db");
 const bcrypt = require("bcrypt");
 const JWT = require("jsonwebtoken");
@@ -33,11 +34,9 @@ const createUser = async (userData) => {
 };
 
 const generateJWT = (user) => {
-  const token = JWT.sign(
-    { id: user.id, email: user.email, username: user.username },
-    process.env.JWT_SECRET,
-    { expiresIn: 3600000 }
-  );
+  const token = JWT.sign({ id: user.id, email: user.email, username: user.username }, process.env.JWT_SECRET, {
+    expiresIn: 3600000,
+  });
 
   return token;
 };
@@ -74,9 +73,7 @@ router.post("/login", async (req, res, next) => {
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res
-        .status(400)
-        .json({ errors: [{ msg: "Invalid  credentials" }] });
+      return res.status(400).json({ errors: [{ msg: "Invalid  credentials" }] });
     }
 
     const token = generateJWT(user);
@@ -96,26 +93,8 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-router.get("/me", async (req, res) => {
+router.get("/me", checkAuth, async (req, res) => {
   try {
-    const bearerToken = req.headers.authorization;
-
-    if (!bearerToken || !bearerToken.startsWith("Bearer ")) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-
-    const token = bearerToken.split(" ")[1];
-
-    if (!token) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-
-    const payload = JWT.verify(token, process.env.JWT_SECRET);
-
-    if (!payload || !payload.email) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-
     const user = await prisma.user.findUnique({
       where: { email: payload.email },
       select: { id: true, email: true, username: true },
